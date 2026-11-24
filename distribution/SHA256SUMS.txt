@@ -1,0 +1,4 @@
+188ff5d67c992eab8fb007adb9708135950309f7c28c931634167b2f49d50935  optional-slashblade-combat-compat-26.1.2-0.1.0.zip
+ba663e59741a5ec0b5fd2b9e55e1b41af1cccbf702a169e088f2c6f29149564f  slashblade-dual-wield-0.4.1-experimental-source.zip
+51ca642c2d5bfcdffb442395e6a6a03cf5194ae2775bc2a0c8772cf03aedee58  slashblade-dual-wield-26.1.2-0.4.1-experimental-with-guide.zip
+2180104e9188b3c7b407698822fc237ad2e551c84160660aa2c927a58b31e5e8  slashblade-dual-wield-26.1.2-0.4.1-experimental.jar
