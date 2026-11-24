@@ -1,0 +1,76 @@
+R1sum_ 源码可用许可 1.0
+R1sum_ Source-Available License 1.0
+
+Copyright (c) 2026 R1sum_
+
+本许可适用于本项目中由发布者有权授权的原创代码和文档（下称“本软件”）。
+第三方材料适用它们各自的许可，不因与本软件共同展示或分发而改用本许可。
+许可及署名只覆盖发布者依法享有或有权授予的权利。
+
+1. 允许的行为
+
+在遵守以下条款的前提下，允许任何人免费取得、运行、研究、复制、修改本软件，
+以及免费分发原版或修改版的源码与编译成品。可以将本软件放入免费整合包。
+修改版不强制公开源码，但必须保留本许可及相应署名，且不得缩减接收者依本许可
+享有的使用、修改和免费分发权限。
+
+2. 保留贡献与标明修改
+
+分发源码时须保留本许可、现有版权声明及第三方许可说明；分发编译成品时须随附
+这些文件，或在一并交付且便于查阅的说明中提供这些文件。
+项目说明、修改版介绍或随附说明中应清楚保留“原项目：SlashBlade Dual Wield；
+原作者署名：R1sum_”。修改版须说明其为修改版，并简要注明主要改动。
+不得冒充原作者、删除原有贡献说明，或暗示原作者为修改版背书。
+
+3. 收费与商业使用限制
+
+未经权利人另行书面授权，不得：
+（a）售卖本软件或其修改版；
+（b）对取得、下载、安装、激活本软件或其修改版收取费用；
+（c）把本软件作为收费整合包、付费资源包或其他收费软件分发的一部分；
+（d）通过会员、赞助门槛、付费解锁或类似安排，向部分付费玩家专门提供本软件
+     的武器、动作、配方或其他功能；
+（e）在下述服务器例外之外，利用本软件本身开展其他商业许可、销售或商业服务。
+
+不与取得本软件或解锁其功能挂钩、也不以付款为条件的自愿捐赠，不视为收费分发。
+捐赠者不得因此独占本软件版本、下载权限或功能。
+
+4. 服务器正常运营例外
+
+允许服务器运营者在服务器中运行本软件，并收取入服、维护或与本软件功能无关的
+会员等正常运营费用，前提是：本软件及其修改版仍免费提供，本软件功能不另行
+收费、不设置本软件专属付费门槛，并向该服务器所有玩家开放。
+不得以捆绑、改名或间接收费规避第 3 条。本许可不代替 Minecraft、其他模组或
+相关平台对服务器运营、商业化及分发所要求的许可或规则。
+
+5. 第三方与独立作品
+
+本许可不授予任何第三方刀具、模型、贴图、商标或其他资源的权利。
+单独交付的 SlashBlade Combat Compatibility 补丁适用其 LGPL-2.1-only 许可，
+本许可中的收费限制不施加于该补丁或其他第三方材料本身。
+本许可不限制与本软件仅共同打包、但相互独立的其他作品本身；包含本软件的
+分发行为仍须满足第 3 条。本许可不是 OSI 认可的开源许可。
+
+6. 无担保与责任
+
+在适用法律允许的范围内，本软件按“现状”提供，不提供适销性、特定用途适用性、
+无侵权或持续兼容等明示或默示担保。权利人和贡献者不对使用、修改或分发本软件
+造成的损失承担责任，法律另有强制规定的除外。
+
+7. 违约与其他授权
+
+违反本许可条件时，依本许可取得的授权终止；除法律另行允许外，应停止相应的
+复制、修改和分发行为。需要本许可之外的授权，可联系发布者另行书面约定。
+未明确授予的权利予以保留。
+
+中文条款为本许可的正式文本。下列英文仅为便于理解的摘要，不改变中文条款：
+
+Free use, modification and free redistribution are permitted with the original
+credit, this license and third-party notices retained. Modified releases must be
+identified as such. Selling the mod, paid downloads, paid bundles containing it,
+and paid access to its features are prohibited without separate written permission.
+Normal paid server operation is allowed if the mod remains freely distributed
+and its features are available to every player on that server without a separate
+mod-specific paywall. Third-party works keep their own licenses. The software is
+provided as-is, subject to applicable law. This is a custom source-available
+license, not an OSI-approved open-source license.
