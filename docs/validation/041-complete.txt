@@ -1,0 +1,42 @@
+PASS: clay blank, regular and advanced molds, copied enchantments and growth, independent saved blade state, exact sample returns and creative entries
+PASS: 73 crafted wakizashi + 5 native kodachi armed the guard and loaded model and texture; 4 ineligible entries rejected
+PASS: 78 live guard hits and ring counters; no offhand charge
+PASS: base blades and shorts followed the native SA tooltip rules, including sealed blades
+PASS: one-key guard reduced a rear hit by 80%, counter hit both sides, no charge, second hit blocked
+PASS: native two-hit combo got one 75% follow-up four ticks after the first hit, with a dedicated offhand animation, no offhand charge or added knockback
+PASS: action key burst, ten hits beyond four blocks, only hit mob held through SA, equipment lock and immunity, two heals and two shields
+PASS: first eight strikes were exactly six game ticks apart; the double slash hit twice on one tick
+PASS: offhand TwilightTsuki Crescent Slash used offhand color and reduced attack damage without charge
+PASS: delayed offhand Crescent Slash landed and its kill split 70/30 between the participating blades
+PASS: two fast Judgement Cuts from each hand created four independently colored and scaled cuts
+PASS: short main left-click three-cut sequence; real V dash + one left click landed three equally spaced thrusts without knockback and sent the thrust pose
+PASS: the next left click restarted the quick-cut chain, and charged First Aid still cast and sent the short blade draw cue
+PASS: short main + long offhand R hit the outer front fan only, with cooldown and no hold or charge
+PASS: two short blades reused the rear-hit guard and ring counter
+PASS: real offhand lethal sweeps dispatched exactly ten death/XP rewards; kills settled 7/3 and proud souls conserved 70/30 through NBT serialization
+PASS: event-modified rewards split once, while other proud-soul additions and spending retained native behavior
+PASS: single blade and idle equipped offhand kept full native main-hand death/XP credit
+PASS: replacing the offhand, swapping away/back in one tick, and rejected offhand damage did not grant shared growth
+PASS: real offhand Judgement Cut retained participation through its delayed projectile; replacement blades received no delayed shared credit
+PASS: real hotbar packets and direct inventory swaps/removals permanently invalidated old pairs; same-stack writes and blade-state updates preserved them
+PASS: counter optional offhand art - First Aid
+PASS: counter optional offhand art - unpressed expiry
+PASS: counter optional offhand art - equipment change
+PASS: counter optional offhand art - broken
+PASS: counter optional offhand art - sealed
+PASS: counter optional offhand art - unenchanted
+PASS: counter optional offhand art - no art
+PASS: counter optional offhand art - Judgement Cut
+PASS: short damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: thrust damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: sweep damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: burst damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: counter damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: followup damaged hostile wolves/golems/bees through managed quiet damage
+PASS: short hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: thrust hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: sweep hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: burst hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: counter hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: followup hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability
+PASS: closed Hydra head armor matched direct physical-part control and front fan rejected a head behind the player

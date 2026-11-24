@@ -1,0 +1,3 @@
+PASS: both combinations captured from front, back, side and first person
+Additional side views: 45
+PASS: captured first-person charge, SA draw, arc and finish

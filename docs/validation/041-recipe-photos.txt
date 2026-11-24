@@ -1,0 +1,9 @@
+PASS: recipe-clay-blank: real client render, expected output present
+PASS: recipe-fired-mold: real client render, expected output present
+PASS: recipe-advanced-mold: real client render, expected output present
+PASS: recipe-wakizashi: real client render, expected output present
+PASS: recipe-advanced-wakizashi: real client render, expected output present
+PASS: item-clay-blank: real client render, expected output present
+PASS: item-fired-mold: real client render, expected output present
+PASS: item-advanced-mold: real client render, expected output present
+PASS: item-wakizashi: real client render, expected output present

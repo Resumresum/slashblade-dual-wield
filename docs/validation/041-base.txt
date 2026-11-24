@@ -1,0 +1,5 @@
+PASS: clay blank, regular and advanced molds, copied enchantments and growth, independent saved blade state, exact sample returns and creative entries
+PASS: 27 crafted wakizashi + 0 native kodachi armed the guard and loaded model and texture; 4 ineligible entries rejected
+Live counters skipped
+PASS: base blades and shorts followed the native SA tooltip rules, including sealed blades
+PASS: base-only short attack and offhand sweep damaged a real zombie without the optional combat compatibility patch

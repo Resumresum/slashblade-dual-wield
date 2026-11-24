@@ -1,0 +1,13 @@
+PASS: short damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: thrust damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: sweep damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: burst damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: counter damaged hostile wolves/golems/bees and preserved neutral protection
+PASS: followup damaged hostile wolves/golems/bees through managed quiet damage
+PASS: short hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: thrust hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: sweep hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: burst hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: counter hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability; physical reach included outside-parent heads and rejected distant parts
+PASS: followup hit one open Hydra head, deduplicated overlapping heads and preserved invulnerability
+PASS: closed Hydra head armor matched direct physical-part control and front fan rejected a head behind the player
