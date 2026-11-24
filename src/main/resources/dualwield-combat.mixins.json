@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "local.dualwield.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": ["GuardMixin", "ParryDamageMixin", "FollowUpAttackMixin", "FollowUpSlashMixin", "FollowUpImpactMixin", "FollowUpRankMixin",
+    "BurstImmunityMixin", "BurstExplosionMixin", "BurstArtReachMixin", "SuperArtMixin", "EquipmentLockMixin",
+    "WakizashiDashMixin", "WakizashiNameMixin", "WakizashiArtDrawMixin", "GrowthRewardMixin", "GrowthDamageMixin",
+    "GrowthPlayerDamageMixin", "InventoryEquipmentMixin"],
+  "client": ["client.CombatMinecraftMixin", "client.CombatInventoryMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

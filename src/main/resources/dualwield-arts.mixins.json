@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "local.dualwield.arts.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "LivingEntityHandMixin",
+    "SlashBladeTickMixin",
+    "SlashBladeDamageMixin",
+    "SlashEffectDamageMixin",
+    "DriveDamageMixin",
+    "TsukiPaymentMixin",
+    "TsukiDelayedMixin",
+    "KillCreditMixin",
+    "JudgementCutMixin",
+    "VoidSlashDamageMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

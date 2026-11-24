@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "slashblade_dual_wield",
+  "version": "0.4.1-experimental",
+  "name": "SlashBlade Dual Wield",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["local.dualwield.DualWield"],
+    "client": ["local.dualwield.client.CombatClient"]
+  },
+  "mixins": ["dualwield-combat.mixins.json", "dualwield-arts.mixins.json", "dualwield-render.mixins.json"],
+  "depends": {
+    "minecraft": "26.1.2",
+    "fabricloader": ">=0.20.1",
+    "java": ">=25",
+    "slashblade": "26.1.2-1.5.1-Resharped-2.0.5"
+  }
+}
