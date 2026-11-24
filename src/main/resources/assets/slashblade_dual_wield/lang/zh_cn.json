@@ -1,0 +1,10 @@
+{
+  "item.slashblade_dual_wield.clay_blank": "胁差泥坯",
+  "item.slashblade_dual_wield.fired_mold": "烧制胁差模具",
+  "item.slashblade_dual_wield.advanced_mold": "高级胁差模具",
+  "item.slashblade_dual_wield.wakizashi": "胁差",
+  "item.slashblade_dual_wield.wakizashi_from": "胁差 · %s",
+  "itemGroup.slashblade_dual_wield": "拔刀剑双刀",
+  "key.category.slashblade_dual_wield.actions": "拔刀剑双刀",
+  "key.slashblade_dual_wield.action": "副刀动作"
+}

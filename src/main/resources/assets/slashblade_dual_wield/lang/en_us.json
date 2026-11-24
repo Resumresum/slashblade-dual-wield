@@ -1,0 +1,10 @@
+{
+  "item.slashblade_dual_wield.clay_blank": "Wakizashi Mold Blank",
+  "item.slashblade_dual_wield.fired_mold": "Fired Wakizashi Mold",
+  "item.slashblade_dual_wield.advanced_mold": "Advanced Wakizashi Mold",
+  "item.slashblade_dual_wield.wakizashi": "Wakizashi",
+  "item.slashblade_dual_wield.wakizashi_from": "Wakizashi · %s",
+  "itemGroup.slashblade_dual_wield": "SlashBlade Dual Wield",
+  "key.category.slashblade_dual_wield.actions": "SlashBlade Dual Wield",
+  "key.slashblade_dual_wield.action": "Offhand Blade Action"
+}

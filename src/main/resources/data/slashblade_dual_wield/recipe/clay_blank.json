@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": { "C": "minecraft:clay_ball", "S": "minecraft:nether_star" },
+  "pattern": ["CSC", "C C", "CCC"],
+  "result": { "id": "slashblade_dual_wield:clay_blank" }
+}
