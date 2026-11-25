@@ -22,6 +22,20 @@ This is a combat addon for **SlashBlade: Refabricated**. It adds **one rebindabl
 
 [Download the prerelease](https://github.com/Resumresum/slashblade-dual-wield/releases/tag/v0.4.1-experimental) · [Installation](#installation) · [Screenshot gallery — Chinese captions](docs/GALLERY.md) · [Detailed combat reference — Chinese](docs/PLAY_GUIDE.md)
 
+## Gameplay in motion
+
+Normal-speed, silent gameplay from `0.4.1-experimental`, recorded in a separate test world. Training targets have AI disabled and 400 HP. The example uses White Fox long blades and matching wakizashi, with the blades' existing Drive SA. These clips show the moves and their timing.
+
+| Wakizashi: dash into triple thrust | Dual long blades: burst combo |
+| --- | --- |
+| ![Real gameplay: wakizashi dash into three rapid thrusts](https://i.redd.it/ek5udcd5cs3i1.gif) | ![Real gameplay: dual-blade cuts followed by four alternating SA beats](https://i.redd.it/knd8rdd5cs3i1.gif) |
+| **V dash → one Left Click:** three rapid thrusts in succession. | **Press R:** eight alternating slashes → a simultaneous double cut → four alternating main/offhand SA beats. |
+| **Wakizashi: guard and counter** | **Dual long blades: automatic follow-up** |
+| ![Real gameplay: offhand wakizashi guard and circular counter](https://i.redd.it/ailohcd5cs3i1.gif) | ![Real gameplay: delayed offhand follow-up after a main-blade hit](https://i.redd.it/nl9zled5cs3i1.gif) |
+| **Press R to guard:** the first valid hit within 1 second gets 80% damage reduction and triggers a circular counter. After success, press R again to attempt the offhand SA. | **Land an eligible melee hit:** the offhand follows about 0.2 seconds later without extra knockback. |
+
+GIFs are hosted on Reddit. If the previews do not load, [watch the clips in the original post](https://www.reddit.com/r/ModdedMinecraft/comments/1y5agze/wakizashi_dual_wield_a_slashblade_addon_with/).
+
 ## Pick your blades
 
 Here, **SA** means the blade's own special attack. **R** is this addon's extra key; **V** remains SlashBlade's existing special-movement key.
