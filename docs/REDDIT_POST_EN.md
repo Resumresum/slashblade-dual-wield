@@ -1,6 +1,6 @@
-# Reddit post draft — not posted
+# Reddit announcement
 
-Target community: [r/ModdedMinecraft](https://www.reddit.com/r/ModdedMinecraft/). This is a draft, not a record of publication.
+Published to [r/ModdedMinecraft](https://www.reddit.com/r/ModdedMinecraft/comments/1y5agze/wakizashi_dual_wield_a_slashblade_addon_with/) on **2026-11-25**, using the **AI Generated** flair. The text below records the published announcement.
 
 Use the **AI Generated** post flair, as specified in the [moderator's AI-policy announcement](https://www.reddit.com/r/ModdedMinecraft/comments/1xs7i7m/rules_updates_including_policy_on_ai_generated/). Check the live posting rules before submitting.
 
@@ -41,4 +41,4 @@ Some screenshots show third-party blade models. Credit belongs to the correspond
 
 ## 中文发布说明
 
-标题和 Body 部分可用于英文文字帖。发布标签选 **AI Generated**；正文保留 Codex 参与方式、测试范围和版本要求。此文件不代表已发布，也没有代用户发送私信或联系版主。
+已于 **2026-11-25** 发布到 r/ModdedMinecraft，使用 **AI Generated** 标签。正文保留 Codex 参与方式、测试范围和版本要求；上方链接可查看实际帖子。未发送私信或联系版主。
