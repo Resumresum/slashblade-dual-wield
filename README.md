@@ -22,6 +22,20 @@
 
 [下载试玩](https://github.com/Resumresum/slashblade-dual-wield/releases/tag/v0.4.1-experimental) · [安装要求](#安装与版本要求) · [完整截图展示](docs/GALLERY.md) · [详细玩法与数值](docs/PLAY_GUIDE.md) · [更新说明](CHANGELOG.md) · [测试范围](docs/TESTING.md)
 
+## 实机动作演示
+
+以下为 `0.4.1-experimental` 的正常速度、无声实机录像，录自独立测试世界。演示目标关闭 AI，设为 400 点生命；使用白狐长刀及同款胁差，SA 为刀本身已有的 Drive。本段展示动作与操作节奏。
+
+| 胁差突进三连刺 | 双长刀连续爆发 |
+| --- | --- |
+| ![胁差突进后三连刺实机动图](https://i.redd.it/ek5udcd5cs3i1.gif) | ![双长刀连续快斩与四拍 SA 实机动图](https://i.redd.it/knd8rdd5cs3i1.gif) |
+| **V 突进 → 一次左键**：连续三次快速刺击。 | **按 R**：八次交替快斩 → 双刀齐斩 → 四拍主副刀交替 SA。 |
+| **胁差招架反击** | **双长刀自动跟斩** |
+| ![副手胁差招架与环形反击实机动图](https://i.redd.it/ailohcd5cs3i1.gif) | ![主刀命中后副刀延迟跟斩实机动图](https://i.redd.it/nl9zled5cs3i1.gif) |
+| **按 R 招架**：1 秒内首个有效受击减伤 80%，触发环形反击；成功后可再按 R 尝试副刀 SA。 | **普通刀招命中**：约 0.2 秒后追加副刀跟斩，不额外击退目标。 |
+
+动图托管于 Reddit；若预览未加载，可[查看原帖中的动作演示](https://www.reddit.com/r/ModdedMinecraft/comments/1y5agze/wakizashi_dual_wield_a_slashblade_addon_with/)。
+
 ## 选好搭配，拔刀上场
 
 **主手和副手的位置会改变玩法。**下表的 R 都指同一个「副刀动作」键，V 仍是拔刀剑本体的特殊移动键。
