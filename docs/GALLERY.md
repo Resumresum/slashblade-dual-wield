@@ -1,55 +1,57 @@
-# 实机截图展示
+# 实机展示 / Gameplay gallery
 
-[返回首页](../README.md) · [玩法说明](PLAY_GUIDE.md)
+[返回首页](../README.md) · [English](../README.en.md) · [玩法说明](PLAY_GUIDE.md)
 
-泥坯、两种模具与胁差的道具图，以及工作台、熔炉中的实际配方截图，放在[首页「如何获得胁差」](../README.md#如何获得胁差)各步骤旁边，方便对照材料和产物。
+## 当前动作 / Current moves · 0.4.12-experimental
 
-以下均为独立测试世界的原始截图，没有重画或合成游戏效果。图片采集于 `0.4.0` 的视图检查，展示沿用到 `0.4.1` 的挂载与第一人称动作；`0.4.1` 新增的 Boss 兼容处理不靠这些截图证明。截图中的刀具模型和贴图来自相应的拔刀剑本体或附属资源，须安装提供它们的模组。
+五段均以当前动作代码在独立测试世界重新录制，正常速度、无声。常规目标关闭 AI、400 点生命；招架片段额外使用一次真实敌方攻击触发反击。白狐刀型是示例，不代表所有刀型与 SA。
 
-## 双长刀：同侧挂载，刀柄错角
+All five clips were freshly recorded with the current motion code, at normal speed without audio. Regular targets have AI disabled and 400 HP; the guard clip uses one real enemy attack to trigger the counter. White Fox blades are examples.
 
-主副刀鞘口靠近，同侧错开角度。带独立刀鞘的模型在副刀出刀时将刀鞘留在腰间。
+| 双长刀十二连斩＋齐斩 / Twelve cuts + double strike | 胁差基础三段 / Wakizashi basic chain |
+| --- | --- |
+| ![十二次交替快斩与齐斩](https://i.redd.it/0t2cjuyt1x3i1.gif) | ![胁差基础三段](https://i.redd.it/b3iqeiue2x3i1.gif) |
 
-| 正面 | 侧面 |
+爆发片段仅展示十二次交替快斩与齐斩，后续四拍 SA 与普通斩击兜底不在片段内。The burst clip ends after the double strike; it does not show the four SA beats or fallback cuts.
+
+| 突进三连刺 / Dash into triple thrust | 自动跟斩 / Automatic follow-up |
+| --- | --- |
+| ![胁差突进三连刺](https://i.redd.it/vxb3kiue2x3i1.gif) | ![双长刀自动跟斩](https://i.redd.it/1q7ychue2x3i1.gif) |
+
+**胁差招架反击 / Wakizashi guard and counter**
+
+![真实敌方攻击触发胁差招架反击](https://i.redd.it/3dz8uhue2x3i1.gif)
+
+## 装备外观 / Equipment views
+
+以下为早期独立测试世界的原始装备截图，保留用于展示本版沿用的挂载、长度和模型区别；不作为当前动作节奏或伤害的证据。旧动作静帧已从展示中移除。模型和贴图来自相应本体或附属资源，须安装提供它们的模组。
+
+These earlier unaltered equipment screenshots show the retained mounting, size, and model differences. They are not evidence of current motion timing or damage. Models and textures belong to their respective mods.
+
+### 双长刀：同侧错角 / Two long blades
+
+| 正面 / Front | 侧面 / Side |
 | --- | --- |
 | ![双长刀正面](images/double-long-front.png) | ![双长刀侧面](images/double-long-side.png) |
 
 ![双长刀背面](images/double-long-back.png)
 
-## 长刀＋胁差：相同刀型，不同长度
+### 长刀＋胁差 / Long blade + wakizashi
 
-制作出的胁差按样板模型的 70% 缩放。下图展示同款长刀与胁差的长度及挂载区别。
+制作胁差以样板模型的 70% 显示；已识别的原生小太刀保留原比例。Crafted wakizashi use 70% of the sample model's scale; recognized native kodachi keep their original scale.
 
-| 正面 | 侧面 |
+| 正面 / Front | 侧面 / Side |
 | --- | --- |
 | ![长刀加胁差正面](images/long-wakizashi-front.png) | ![长刀加胁差侧面](images/long-wakizashi-side.png) |
 
 ![长刀加胁差背面](images/long-wakizashi-back.png)
 
-## 第一人称：副刀跟斩出刀姿态
+### 其他模型 / Other models
 
-这张空场动作截图展示副刀出刀与刀光，不展示实际对怪物的伤害。跟斩的伤害、时序和去重已另做受控验证。
-
-![双长刀第一人称副刀动作](images/double-long-first-action.png)
-
-## 胁差蓄力与 SA 出刀
-
-**抬刀蓄力 → 抽刀 → 快速向前下方斩出 → 收势短暂停顿。**
-
-| 蓄满：抬起刀鞘，闪光进入视野 | 抽刀 |
+| 其他长刀 / Other long blade | 原生小太刀 / Native kodachi |
 | --- | --- |
-| ![胁差蓄满姿态](images/charge-short-ready.png) | ![胁差抽刀姿态](images/charge-short-draw.png) |
+| ![其他长刀副手模型](images/off-slashblade-yamato.png) | ![TwilightTsuki 小太刀](images/off-twilighttsuki-kodachi.png) |
 
-| 斩出过程中的一个采样帧 | 收势停顿 |
-| --- | --- |
-| ![胁差斩出采样帧](images/charge-short-strike.png) | ![胁差收势姿态](images/charge-short-finish.png) |
+四张道具渲染与五张工作台／普通熔炉配方截图见[首页制作流程](../README.md#把喜欢的长刀做成随身的胁差)。这些实机图保留用于本版未改变的配方与物品介绍；历史拍摄记录见[测试范围](TESTING.md)。
 
-静态截图只展示动作的采样帧，不能完整表达挥刀速度，也不能代表所有刀型、所有 SA 的特效。
-
-## 其他刀型示例
-
-| 其他长刀的副手挂载 | 已识别原生小太刀 |
-| --- | --- |
-| ![其他长刀副手模型示例](images/off-slashblade-yamato.png) | ![副手 TwilightTsuki 小太刀示例](images/off-twilighttsuki-kodachi.png) |
-
-测试中的额外侧视检查覆盖 45 把刀，实际短刀招架检查覆盖 73 把制作胁差和 5 把原生小太刀。外观与基础流程的通过，不代表每把刀的第三方独有能力均已验证；详见[测试范围](TESTING.md)。
+See the [README crafting steps](../README.en.md#forge-a-matching-wakizashi) for four item renders and five in-game crafting/furnace screenshots. These illustrate the retained recipes; their historical capture scope is documented in [TESTING](TESTING.md).

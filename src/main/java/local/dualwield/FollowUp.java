@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public final class FollowUp {
@@ -32,9 +33,18 @@ public final class FollowUp {
     private FollowUp() {}
 
     public static void clear(ServerPlayer player) {
-        CURRENT.remove(player);
-        SLASHES.values().removeIf(action -> action.pair != null && action.pair.isOwnedBy(player));
-        QUEUE.removeIf(impact -> impact.player == player);
+        var current = CURRENT.remove(player);
+        if (current != null) current.cancelled = true;
+        SLASHES.values().removeIf(action -> {
+            if (action.pair == null || !action.pair.isOwnedBy(player)) return false;
+            action.cancelled = true;
+            return true;
+        });
+        QUEUE.removeIf(impact -> {
+            if (impact.player != player) return false;
+            impact.action.cancelled = true;
+            return true;
+        });
     }
 
     public static void markSlash(LivingEntity attacker, EntitySlashEffect slash) {
@@ -72,8 +82,16 @@ public final class FollowUp {
         var action = findAction(player);
         if (action == null || !action.matches(player) || DualWieldCombat.active(player)
                 || !action.targets.add(living.getUUID())) return;
+        long now = player.level().getGameTime();
         QUEUE.add(new Impact(player, living, CombatTargeting.physical(player, living), action,
-            player.level().getGameTime() + DELAY_TICKS, extraDamage));
+            now + DELAY_TICKS, extraDamage));
+        if (action.lastCueTick != now) {
+            action.lastCueTick = now;
+            StrokeScheduler.after(player, action.level::getGameTime,
+                DELAY_TICKS - BladeMotion.contactTicks(BladeMotion.FOLLOW_UP),
+                () -> action.matches(player) && !DualWieldCombat.active(player),
+                () -> BladeSweep.followUpCue(player));
+        }
     }
 
     private static Action findAction(ServerPlayer player) {
@@ -111,20 +129,20 @@ public final class FollowUp {
         if (QUEUE.isEmpty()) return;
         var ready = new ArrayList<Impact>();
         QUEUE.removeIf(impact -> {
+            if (!impact.action.matches(impact.player) || DualWieldCombat.active(impact.player)) return true;
             if (impact.impactTick > impact.action.level.getGameTime()) return false;
             ready.add(impact);
             return true;
         });
-        var animated = new HashSet<ServerPlayer>();
         for (var impact : ready) {
             if (impact.target.isAlive() && impact.target.level() == impact.player.level()
                     && impact.action.matches(impact.player) && !DualWieldCombat.active(impact.player)
                     && (!(impact.target instanceof ServerPlayer other) || impact.player.canHarmPlayer(other))) {
+                BladeSweep.swingSound(impact.player, InteractionHand.OFF_HAND);
                 if (CombatGrowth.withOffhand(impact.player,
                         () -> CombatTargeting.followUp(impact.player, impact.target, impact.physical,
-                            () -> damageWithoutKnockback(impact.player, impact.target, impact.damage)))
-                        && impact.action.matches(impact.player) && animated.add(impact.player)) {
-                    BladeSweep.followUpCue(impact.player);
+                            () -> damageWithoutKnockback(impact.player, impact.target, impact.damage)))) {
+                    BladeSweep.impact(impact.player, impact.physical);
                 }
             }
         }
@@ -159,10 +177,29 @@ public final class FollowUp {
         }
     }
 
-    private record Action(ServerLevel level, ItemStack main, ItemStack off, Identifier combo, long start,
-            Set<UUID> targets, CombatGrowth.Pair pair) {
+    private static final class Action {
+        final ServerLevel level;
+        final ItemStack main, off;
+        final Identifier combo;
+        final long start;
+        final Set<UUID> targets;
+        final CombatGrowth.Pair pair;
+        long lastCueTick = -1;
+        boolean cancelled;
+
+        Action(ServerLevel level, ItemStack main, ItemStack off, Identifier combo, long start,
+                Set<UUID> targets, CombatGrowth.Pair pair) {
+            this.level = level;
+            this.main = main;
+            this.off = off;
+            this.combo = combo;
+            this.start = start;
+            this.targets = targets;
+            this.pair = pair;
+        }
+
         boolean matches(ServerPlayer player) {
-            return pair != null && pair.valid() && player.isAlive() && level == player.level() && main == player.getMainHandItem()
+            return !cancelled && pair != null && pair.valid() && player.isAlive() && level == player.level() && main == player.getMainHandItem()
                 && off == player.getOffhandItem() && BladeTypes.hasPair(player, false);
         }
     }

@@ -46,6 +46,20 @@ public final class DualBladeRender {
         var model = BladeModelManager.getInstance().getModel(item.modelLocation);
         var bladeState = CapabilitySlashBlade.getBladeState(off).orElseThrow();
         var motion = motion(entity, off);
+        pose.pushPose();
+        try {
+            mountBlade(pose,entity,bodyUp);
+            BladeRenderState.renderOverrided(item, model, "sheath", item.textureLocation, pose, nodes, light);
+            BladeRenderState.renderOverridedLuminous(item, model, "sheath_luminous", item.textureLocation, pose, nodes, light);
+            if (!motion.drawn()) blade(pose, nodes, light, item, model, bladeState.isBroken());
+        } finally {
+            pose.popPose();
+        }
+    }
+
+    private static void mountBlade(PoseStack pose, ArmedEntityRenderState entity, Vector3f bodyUp) {
+        var off=offhand(entity);
+        var item=BladeBaseRenderer.createBladeItemRenderState(off);
         var localUp = new Matrix4f(pose.last().pose()).invert().transformDirection(new Vector3f(bodyUp));
         var normal = new Vector3f(1, 0, 0).cross(localUp);
         if (normal.lengthSquared() <= 1e-8f) normal.set(0, 0, 1);
@@ -56,19 +70,11 @@ public final class DualBladeRender {
         mainMount.add(separation);
         var offMount = mountPoint(item.modelLocation);
 
-        pose.pushPose();
-        try {
             // Keep both grips on the same vertical plane and tilt the offhand grip upward.
             pose.translate(mainMount.x, mainMount.y, mainMount.z);
             pose.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(22), normal));
             if (BladeTypes.isCraftedWakizashi(off)) pose.scale(CRAFTED_SCALE, CRAFTED_SCALE, CRAFTED_SCALE);
             pose.translate(-offMount.x, -offMount.y, -offMount.z);
-            BladeRenderState.renderOverrided(item, model, "sheath", item.textureLocation, pose, nodes, light);
-            BladeRenderState.renderOverridedLuminous(item, model, "sheath_luminous", item.textureLocation, pose, nodes, light);
-            if (!motion.drawn()) blade(pose, nodes, light, item, model, bladeState.isBroken());
-        } finally {
-            pose.popPose();
-        }
     }
 
     static Vector3f mountPoint(Identifier model) {
@@ -90,6 +96,21 @@ public final class DualBladeRender {
         boolean shortBlade = BladeTypes.isWakizashi(off);
         BladeItemRenderState item = BladeBaseRenderer.createBladeItemRenderState(off);
         WavefrontObject model = BladeModelManager.getInstance().getModel(item.modelLocation);
+        var stroke = CombatClient.stroke(BladeStrokeRender.entityId(entity), true);
+        if (stroke != null) {
+            var body = new Matrix4f(pose.last().pose());
+            pose.pushPose();
+            try {
+                var bodyUp=body.transformDirection(new Vector3f(0,-1,0));
+                var mainState=CapabilitySlashBlade.getBladeState(entity.getMainHandItemStack()).orElseThrow();
+                BladeStrokeRender.mount(pose,body,entity,mainState);
+                mountBlade(pose,entity,bodyUp);
+                BladeStrokeRender.place(pose, body, entity, off, true, stroke);
+                blade(pose, nodes, light, item, model, blade.isBroken());
+                BladeStrokeRender.ribbon(pose, nodes, body, entity, off, model, true, stroke);
+            } finally { pose.popPose(); }
+            return;
+        }
         float swing = Mth.sin(motion.progress * (float) Math.PI);
         float guard = motion.guard;
         float handed = entity.mainArm == HumanoidArm.RIGHT ? 1.0f : -1.0f;
@@ -132,6 +153,8 @@ public final class DualBladeRender {
     private static Motion motion(ArmedEntityRenderState entity, ItemStack off) {
         int entityId = ((FabricRenderState) entity).getDataOrDefault(RenderStateKeys.ENTITY_ID, -1);
         float progress = CombatClient.offhandSwingProgress(entityId);
+        var stroke = CombatClient.stroke(entityId, true);
+        if (stroke != null) progress = Math.max(0.001f, stroke.progress());
         float guard = BladeTypes.isWakizashi(off) ? CombatClient.guardPose(entityId) : 0f;
         if (progress == 0 && entity.attackArm == entity.mainArm.getOpposite()) progress = entity.attackTime;
         return new Motion(entityId, progress, guard, progress > 0 && CombatClient.isFollowUpSwing(entityId));

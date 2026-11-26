@@ -50,7 +50,7 @@ function Build-Jar([string]$tree, [string]$name) {
     Get-FileHash -LiteralPath "$build/libs/$name.jar"
 }
 
-$candidate = 'slashblade-dual-wield-26.1.2-0.4.1-experimental'
+$candidate = 'slashblade-dual-wield-26.1.2-0.4.12-experimental'
 if (!$ProbeOnly) { Build-Jar 'src/main' $candidate }
 if ($ProbeOnly -or $WithProbe) {
     $classpath += "$build/libs/$candidate.jar"

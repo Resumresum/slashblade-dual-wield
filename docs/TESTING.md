@@ -2,18 +2,30 @@
 
 [返回首页](../README.md)
 
-以下是已经保存的独立测试记录，供公开测试版参考。本轮发布文档整理没有重新启动整套游戏测试，也没有修改玩法代码；不要把文档检查理解成新增的一轮实机回归。
+本页区分当前动作检查与历史玩法基线；历史通过不等于本版重新覆盖了全部配方、养成、Boss 和第三方能力。
 
-为道具介绍另开了一次新的独立截图世界，使用 `0.4.1` 游玩 JAR，拍摄四张实际物品渲染图，以及泥坯、普通熔炉烧制、高级模具、普通成型、高级成型的五张原生界面截图；拍摄前检查了实际菜单产物。此项仅验证展示用配方和截图，不替代完整战斗回归。[截图检查摘要](validation/041-recipe-photos.txt)。
+## 当前动作与调度检查
 
-## 已有验证
+- 当前动作数学检查覆盖 **16,884 个姿态**与 **67,536 个模型朝向**，检查刀身、刀光轨迹和朝向关系。
+- 完整时序检查覆盖十二次交替提示、双刀齐斩、四拍 SA、延后接触与短刀三连刺间隔；它验证调度规则，不代替所有环境的实战。
+- 当前五段正常速度、无声实机片段见[实机展示](GALLERY.md)。常规目标关闭 AI、400 点生命；招架片段使用一次真实敌方攻击。
+- 最终 `0.4.12-experimental` 游玩 JAR 已通过集成服务器 `-Combat` 探针 **9 项检查**；配方冒烟检查中的烧制模具与 `FOX_WHITE` 成型均通过。这不代表独立服务器或真实多人联机已验证。
+- 最终游玩 JAR SHA-256：`5FF5E5ECE041C8D0B114BE755D3D17948784D5097B7023A25B2F6CB326BA1ACA`。
+
+配方道具图于 0.4.1 独立截图世界拍摄：四张实际物品渲染图，五张工作台／普通熔炉原生界面图，拍摄前检查实际菜单产物。当前制作逻辑保留；这些图片仅说明配方和物品，不证明本版全面战斗回归。[截图检查摘要](validation/041-recipe-photos.txt)。
+
+### English scope
+
+Current motion checks cover **16,884 poses** and **67,536 model orientations**, plus full sequence scheduling, delayed contact, and triple-thrust spacing. Five fresh silent, normal-speed clips demonstrate the current moves; regular targets have AI disabled and 400 HP, with one real enemy attack for the guard. The final **0.4.12-experimental** gameplay JAR passed **all nine integrated-server combat probe checks**, plus fired-mold and `FOX_WHITE` recipe smoke checks. This is not dedicated-server or real multiplayer verification. Earlier crafting, growth, Boss, and blade-catalog results below are historical baselines for retained logic, not a fresh exhaustive 0.4.12 regression. Real multiplayer and third-person custom full meshes remain incompletely tested.
+
+## 历史玩法基线
 
 | 环境 / 项目 | 已有结果与范围 | 原始摘要 |
 | --- | --- | --- |
 | 0.4.1 双刀附属＋战斗兼容补丁，单人独立实例 | 配方、复制、成长、招架、反击 SA、跟斩、爆发、三连刺、横斩等回归记录通过；78 把短刀实际招架 | [041-complete.txt](validation/041-complete.txt) |
 | 0.4.1 新增攻击 Boss 与敌对单位受控检查 | 六类新增攻击、九头蛇实际部位、重叠去重、原有无敌 / 护甲、敌对狼 / 铁傀儡 / 蜜蜂及中立保护 | [041-boss.txt](validation/041-boss.txt) |
 | 0.4.1 仅本体依赖 | 27 把制作胁差的目录、资源与配方；真实短刀攻击、横斩可伤害僵尸；未加载可选补丁 | [041-base.txt](validation/041-base.txt) |
-| 0.4.0 外观视图检查 | 双长刀、长刀＋胁差的正 / 背 / 侧 / 第一人称；额外 45 把刀侧视；短刀蓄力、SA 出刀和收势截图 | [040-views.txt](validation/040-views.txt)、[截图](GALLERY.md) |
+| 0.4.0 外观视图检查 | 双长刀、长刀＋胁差的正 / 背 / 侧 / 第一人称；额外 45 把刀侧视；短刀蓄力、SA 出刀和收势截图 | [040-views.txt](validation/040-views.txt) |
 
 完整环境中的 78 把短刀由 **73 把制作胁差＋5 把原生小太刀**组成。它证明这些样本能加载模型贴图、进入招架并处理受击反击，不证明第三方所有特殊能力均已完成验证。
 
@@ -34,7 +46,7 @@
 
 ## 仍需继续验证
 
-- 独立服务器启动、真实多人联机、不同玩家互相观察的动作同步与延迟体验。
+- 独立服务器、真实多人联机、不同玩家互相观察的动作同步与延迟体验，以及第三人称自定义全模型。
 - 长期生存、自然 Boss 战全流程、大型整合包的组合冲突。
 - 每个第三方附属的独立物品类、额外组件、自定义 SA 与特殊持久数据。
 - 不同 JEI / EMI 版本对本附属动态成型配方的完整展示。

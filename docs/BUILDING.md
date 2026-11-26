@@ -23,7 +23,7 @@
 .\build.ps1
 ```
 
-源码在 `src/main`，产物写入 `build/libs/slashblade-dual-wield-26.1.2-0.4.1-experimental.jar`。构建脚本不会下载前置，依赖缺失时须先补齐环境。
+源码在 `src/main`，产物写入 `build/libs/slashblade-dual-wield-26.1.2-0.4.12-experimental.jar`。构建脚本不会下载前置，依赖缺失时须先补齐环境。
 
 ## 独立测试探针
 
@@ -33,6 +33,10 @@
 .\build.ps1 -WithProbe
 ```
 
-测试入口的目录保护与数据来源同样依赖本机约定，迁移后必须一并审查，确保只使用新建的独立测试世界。已有结果见[测试范围](TESTING.md)。
+测试入口的目录保护与数据来源同样依赖本机约定，迁移后必须一并审查，确保只使用新建的独立测试世界。已有结果与历史基线见[测试范围](TESTING.md)。
 
 公开源码用于检查与修改本版实现；当前不承诺一条命令在任意电脑上自动配置开发环境。各依赖的源码与许可仍由其原项目提供。
+
+## English build summary
+
+This source release uses the included PowerShell scripts and JDK 25, without a Gradle/Loom project. The scripts have machine-specific paths for Java, the Minecraft runtime, and dependency mods; adapt those paths to legally obtained equivalent files before running them. They do not download dependencies. Run `./build.ps1` from the repository root to create `build/libs/slashblade-dual-wield-26.1.2-0.4.12-experimental.jar`. `-WithProbe` also builds the development probe, which is not a gameplay dependency. Review test-directory protections and use a new separate test world. Real saves, account configuration, and runtime libraries are not included.

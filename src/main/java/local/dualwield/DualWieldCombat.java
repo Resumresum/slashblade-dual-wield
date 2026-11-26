@@ -27,7 +27,6 @@ public final class DualWieldCombat {
     private static final int INVULNERABILITY_TICKS = 16;
     private static final int COOLDOWN_TICKS = 160;
     private static final int SWEEP_COOLDOWN_TICKS = 40;
-    private static final int[] TIMING = {0, 6, 12, 18, 24, 30, 36, 42, 52, 56, 60, 64, 68};
     private static final Identifier SLOW_ID = Identifier.fromNamespaceAndPath(DualWield.ID, "burst_slow");
     private static final AttributeModifier BURST_SLOW = new AttributeModifier(SLOW_ID, -0.35,
         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
@@ -41,11 +40,14 @@ public final class DualWieldCombat {
             if (target instanceof ServerPlayer player && taken > 0 && !blocked) finishGuard(player, source);
         });
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            StrokeScheduler.tick();
             BurstTargetHold.tick();
             FollowUp.tick();
             for (ServerPlayer player : server.getPlayerList().getPlayers()) tick(player);
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            WakizashiCombat.clear(handler.player);
+            FollowUp.clear(handler.player);
             var state = STATES.remove(handler.player.getUUID());
             if (state != null) clearActions(handler.player, state);
         });
@@ -58,6 +60,8 @@ public final class DualWieldCombat {
     }
 
     public static void equipmentChanged(ServerPlayer player) {
+        WakizashiCombat.clear(player);
+        FollowUp.clear(player);
         var state = STATES.get(player.getUUID());
         if (state == null) return;
         clearActions(player, state);
@@ -169,21 +173,31 @@ public final class DualWieldCombat {
 
     private static void runBurst(ServerPlayer player, State state, long now) {
         player.setYRot(clampYaw(player.getYRot(), state.yaw));
-        if (state.next >= TIMING.length || now - state.start < TIMING[state.next]) return;
+        if (state.next >= BurstSequence.STAGES) {
+            if (now >= state.contactUntil) {
+                clearActions(player, state);
+                status(player, state);
+            }
+            return;
+        }
+        if (now - state.start < BurstSequence.startTick(state.next)) return;
         int beat = state.next++;
-        if (beat < 8) {
+        if (beat < BurstSequence.CUTS) {
             BladeSweep.burst(player, hand(beat), beat);
-        } else if (beat == 8) {
+            state.contactUntil = now + BladeMotion.contactTicks(BladeMotion.BURST);
+        } else if (beat == BurstSequence.CUTS) {
             BladeSweep.burst(player, InteractionHand.MAIN_HAND, beat);
             if (state.valid(player)) BladeSweep.burst(player, InteractionHand.OFF_HAND, beat + 1);
+            state.contactUntil = now + BladeMotion.contactTicks(BladeMotion.BURST);
         } else {
-            var hand = hand(beat - 9);
+            var hand = hand(beat - (BurstSequence.CUTS+1));
             boolean secondary = hand == InteractionHand.OFF_HAND;
             if (!HandSlashArts.cast(player, hand, secondary ? 0.45f : 0.65f, secondary)) {
                 BladeSweep.fallback(player, hand);
+                state.contactUntil = now + BladeMotion.contactTicks(BladeMotion.BURST);
             }
         }
-        if (state.next == TIMING.length || !state.valid(player)) {
+        if ((state.next == BurstSequence.STAGES && now >= state.contactUntil) || !state.valid(player)) {
             clearActions(player, state);
             status(player, state);
         }
@@ -209,7 +223,7 @@ public final class DualWieldCombat {
         ServerPlayer owner;
         ServerLevel level;
         ItemStack main, off;
-        long guardUntil = -1, invulnerableUntil, counterArtUntil, cooldownUntil, sweepCooldownUntil, start;
+        long guardUntil = -1, invulnerableUntil, counterArtUntil, cooldownUntil, sweepCooldownUntil, start, contactUntil;
         int next;
         float yaw;
         boolean burst;

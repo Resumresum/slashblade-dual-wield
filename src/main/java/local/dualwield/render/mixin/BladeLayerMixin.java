@@ -6,6 +6,7 @@ import local.dualwield.BladeTypes;
 import local.dualwield.client.CombatClient;
 import local.dualwield.client.DualBladeRender;
 import local.dualwield.client.WakizashiArtPose;
+import local.dualwield.client.BladeStrokeRender;
 import jp.nyatla.nymmd.MmdMotionPlayerGL2;
 import mods.flammpfeil.slashblade.capability.slashblade.ISlashBladeState;
 import mods.flammpfeil.slashblade.client.renderer.layers.LayerMainBlade;
@@ -22,6 +23,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
+import org.joml.Matrix4f;
+import mods.flammpfeil.slashblade.client.renderer.model.BladeModelManager;
+import mods.flammpfeil.slashblade.client.renderer.special.BladeBaseRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,6 +48,9 @@ public abstract class BladeLayerMixin {
     @Unique
     private float dualwield$artDraw;
 
+    @Unique
+    private final Matrix4f dualwield$bodyPose = new Matrix4f();
+
     @Inject(method = "renderOffhandItem", at = @At("HEAD"), cancellable = true)
     private void dualwield$renderOffhand(PoseStack pose, SubmitNodeCollector nodes, int light,
                                          EntityRenderState state, CallbackInfo ci) {
@@ -59,6 +66,7 @@ public abstract class BladeLayerMixin {
             MmdMotionPlayerGL2 motion, CallbackInfo ci) {
         // The humanoid render stack has already flipped its vertical axis.
         pose.last().pose().transformDirection(dualwield$bodyUp.set(0, -1, 0));
+        dualwield$bodyPose.set(pose.last().pose());
         dualwield$artDraw = -1f;
         dualwield$chargeHold = 0f;
         var client = Minecraft.getInstance();
@@ -80,14 +88,25 @@ public abstract class BladeLayerMixin {
 
     @ModifyVariable(method = "lambda$submit$1", at = @At("STORE"), ordinal = 0)
     private ComboState dualwield$holdShortBladeDuringCharge(ComboState combo) {
-        return dualwield$chargeHold > 0f || dualwield$artDraw >= 0f ? ComboStateRegistry.STANDBY : combo;
+        var id = ComboStateRegistry.getId(combo);
+        boolean customShort = id != null && id.getNamespace().equals("slashblade_dual_wield")
+            && id.getPath().startsWith("short_");
+        return customShort || dualwield$chargeHold > 0f || dualwield$artDraw >= 0f ? ComboStateRegistry.STANDBY : combo;
     }
 
     @Inject(method = "lambda$submit$1", at = @At(value = "INVOKE", ordinal = 0, target = MODEL_RENDER))
     private void dualwield$scaleMainBlade(ArmedEntityRenderState state, PoseStack pose, float yOffset,
             double motionScale, ISlashBladeState blade, ItemStack stack, double modelScale, SubmitNodeCollector nodes,
             int light, MmdMotionPlayerGL2 motion, CallbackInfo ci) {
+        var stroke = CombatClient.stroke(BladeStrokeRender.entityId(state), false);
         dualwield$scaleShortMain(pose, stack);
+        if (stroke != null) {
+            BladeStrokeRender.place(pose, dualwield$bodyPose, state, stack, false, stroke);
+            var item = BladeBaseRenderer.createBladeItemRenderState(stack);
+            BladeStrokeRender.ribbon(pose, nodes, dualwield$bodyPose, state, stack,
+                BladeModelManager.getInstance().getModel(item.modelLocation), false, stroke);
+            return;
+        }
         if (dualwield$chargeHold > 0f || dualwield$artDraw >= 0f) {
             WakizashiArtPose.place(pose, blade.getModel().orElse(DefaultResources.resourceDefaultModel), state.mainArm,
                 dualwield$chargeHold, dualwield$artDraw);
@@ -98,7 +117,13 @@ public abstract class BladeLayerMixin {
     private void dualwield$mountAtMainScabbard(ArmedEntityRenderState state, PoseStack pose, float yOffset,
             double motionScale, ISlashBladeState blade, ItemStack stack, double modelScale, SubmitNodeCollector nodes,
             int light, MmdMotionPlayerGL2 motion, CallbackInfo ci) {
+        // The offhand sheath stays on the body even when a native main-hand move swings its sheath.
+        BladeStrokeRender.rememberMount(pose, dualwield$bodyPose, state, blade);
+        pose.pushPose();
+        BladeStrokeRender.mount(pose, dualwield$bodyPose, state, blade);
         DualBladeRender.submitMounted(pose, nodes, light, state, dualwield$bodyUp);
+        pose.popPose();
+        if (BladeStrokeRender.active(state)) BladeStrokeRender.mount(pose, dualwield$bodyPose, state, blade);
         dualwield$scaleShortMain(pose, stack);
         if (dualwield$chargeHold > 0f) {
             WakizashiArtPose.place(pose, blade.getModel().orElse(DefaultResources.resourceDefaultModel), state.mainArm,

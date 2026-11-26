@@ -27,7 +27,15 @@ $game = if ($Playtest) { Join-Path $PSScriptRoot 'playtest' } else { Join-Path $
 $runName = if ($Playtest) { 'playtest-' + [DateTime]::UtcNow.ToString('yyyyMMddHHmmssfff') } else { $World }
 $evidence = Join-Path $PSScriptRoot "evidence/$runName"
 $libs = Join-Path $PSScriptRoot 'build/libs'
-if (!$PrepareOnly -and (Get-Process java, javaw -ErrorAction SilentlyContinue)) { throw 'A Java process is already running' }
+$processRecord = Join-Path $game 'launcher-process.json'
+if (!$PrepareOnly -and (Test-Path -LiteralPath $processRecord)) {
+    $previousLaunch = Get-Content -Raw -LiteralPath $processRecord | ConvertFrom-Json
+    $previousProcess = Get-Process -Id ([int]$previousLaunch.pid) -ErrorAction SilentlyContinue
+    if ($previousProcess -and $previousProcess.ProcessName -in @('java', 'javaw') -and
+            $previousProcess.StartTime.ToUniversalTime().Ticks -eq ([DateTime]$previousLaunch.startTimeUtc).ToUniversalTime().Ticks) {
+        throw 'This feedback test instance is already running'
+    }
+}
 if (!$Playtest) {
     foreach ($path in @($evidence, "$game/saves/$World", "$game/$World.txt")) {
         if (Test-Path -LiteralPath $path) { throw 'Choose a new test-world name' }
@@ -55,7 +63,7 @@ if ($Playtest) {
 } else {
     $extraMods += "$libs/dual-wield-recipe-probe.jar"
 }
-if (!$Baseline) { $extraMods += "$libs/slashblade-dual-wield-26.1.2-0.4.1-experimental.jar" }
+if (!$Baseline) { $extraMods += "$libs/slashblade-dual-wield-26.1.2-0.4.12-experimental.jar" }
 if ($Combat) {
     $stage1Mods = 'D:\Minecraft\slashblade-stage1-test\instance\mods'
     $copies = Join-Path $PSScriptRoot 'build/stage1-deps'
@@ -105,6 +113,8 @@ if ($Playtest) {
     $process = Start-Process @launch
     $process.Id | Set-Content "$evidence/pid.txt"
     if ($process.WaitForExit(3000)) { throw "Minecraft closed during startup. Logs: $evidence" }
+    @{pid=$process.Id; startTimeUtc=$process.StartTime.ToUniversalTime().ToString('O')} |
+        ConvertTo-Json | Set-Content -LiteralPath $processRecord
     return
 }
 $process = Start-Process @launch

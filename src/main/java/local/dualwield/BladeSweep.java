@@ -2,15 +2,15 @@ package local.dualwield;
 
 import mods.flammpfeil.slashblade.capability.slashblade.CapabilitySlashBlade;
 import mods.flammpfeil.slashblade.item.ItemSlashBlade;
-import mods.flammpfeil.slashblade.registry.ComboStateRegistry;
 import mods.flammpfeil.slashblade.util.AttackHelper;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 
@@ -28,6 +28,7 @@ final class BladeSweep {
                 var target = hit.target();
                 if (hit.physical().getBoundingBox().distanceToSqr(origin) > SHORT_REACH * SHORT_REACH) continue;
                 if (CombatGrowth.withOffhand(player, () -> FollowUp.damageWithoutKnockback(player, target, 2f))) {
+                    impact(player, hit.physical());
                     target.knockback(0.18, player.getX() - target.getX(), player.getZ() - target.getZ());
                 }
             }
@@ -45,44 +46,47 @@ final class BladeSweep {
     }
 
     static void burst(ServerPlayer player, InteractionHand hand, int beat) {
-        int holdTicks = beat >= 8 ? 24 : beat == 7 ? 12 : 8;
-        sweep(player, hand, LONG_REACH, hand == InteractionHand.MAIN_HAND ? 0.52f : 0.36f, beat >= 8, holdTicks);
+        int holdTicks = beat >= BurstSequence.CUTS ? 24 : beat == BurstSequence.CUTS-1 ? 12 : 8;
+        beginSweep(player, hand, hand == InteractionHand.MAIN_HAND ? 0.52f : 0.36f,
+            beat >= BurstSequence.CUTS, holdTicks, beat, true, beat<BurstSequence.CUTS ? BurstSequence.CUT_DAMAGE_SCALE : 1f);
     }
 
     static void followUpCue(ServerPlayer player) {
-        int color = CapabilitySlashBlade.getBladeState(player.getOffhandItem()).orElseThrow().getColorCode();
-        CombatPackets.animateOffhand(player, CombatPackets.FOLLOW_UP);
-        var level = player.level();
-        var dust = new DustParticleOptions(color, 1.05f);
-        int side = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-        for (int point = 0; point < 9; point++) {
-            double progress = point / 8.0;
-            double angle = Math.toRadians(player.getYRot() + side * (-54 + 72 * progress));
-            double radius = 1.10 + 0.45 * progress;
-            level.sendParticles(dust, player.getX() - Math.sin(angle) * radius,
-                player.getY() + player.getBbHeight() * (0.43 + 0.21 * progress),
-                player.getZ() + Math.cos(angle) * radius, 1, 0, 0, 0, 0);
-        }
-        level.playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.7f, 1.35f);
+        CombatPackets.stroke(player, InteractionHand.OFF_HAND, BladeMotion.FOLLOW_UP, 0);
     }
 
     static void offhandSweep(ServerPlayer player) {
-        sweep(player, InteractionHand.OFF_HAND, LONG_REACH, 0.65f, true, 0);
+        beginSweep(player, InteractionHand.OFF_HAND, 0.65f, true, 0, 0, false,1f);
     }
 
     static void fallback(ServerPlayer player, InteractionHand hand) {
-        sweep(player, hand, LONG_REACH, 0.24f, false, 8);
+        beginSweep(player, hand, 0.24f, false, 8, 0, true,1f);
+    }
+
+    private static void beginSweep(ServerPlayer player, InteractionHand hand, float ratio, boolean wide,
+            int holdTicks, int beat, boolean burst,float damageScale) {
+        var level = player.level();
+        var main = player.getMainHandItem();
+        var off = player.getOffhandItem();
+        player.swing(hand, true);
+        CombatPackets.stroke(player, hand, BladeMotion.BURST, beat);
+        StrokeScheduler.after(player, level::getGameTime, BladeMotion.contactTicks(BladeMotion.BURST),
+            () -> level.getServer().getPlayerList().getPlayer(player.getUUID()) == player
+                && player.isAlive() && !player.isSpectator() && player.level() == level
+                && main == player.getMainHandItem() && off == player.getOffhandItem()
+                && BladeTypes.hasUsablePair(player) && (!burst || DualWieldCombat.active(player)),
+            () -> sweep(player, hand, LONG_REACH, ratio, wide, holdTicks,damageScale));
     }
 
     private static void sweep(ServerPlayer player, InteractionHand hand, double reach, float ratio, boolean wide,
-            int holdTicks) {
+            int holdTicks,float damageScale) {
         var stack = player.getItemInHand(hand);
         var state = CapabilitySlashBlade.getBladeState(stack).orElseThrow();
         var blade = (ItemSlashBlade) stack.getItem();
         double weaponDamage = blade.getDefaultAttributeModifiers(stack).modifiers().stream()
             .filter(entry -> entry.attribute().equals(Attributes.ATTACK_DAMAGE))
             .mapToDouble(entry -> entry.modifier().amount()).sum();
-        float damage = (float) Math.max(0.5, (weaponDamage + 1 + AttackHelper.getRankBonus(player)) * ratio);
+        float damage = BurstSequence.damage(weaponDamage + 1 + AttackHelper.getRankBonus(player),ratio,damageScale);
         var level = player.level();
         boolean hit = CombatTargeting.area(player, reach, hits -> {
             boolean any = false;
@@ -102,20 +106,16 @@ final class BladeSweep {
                 }
                 if (damaged) {
                     any = true;
+                    impact(player, candidate.physical());
                     if (holdTicks > 0) BurstTargetHold.hold(target, holdTicks);
                 }
             }
             return any;
         });
         if (hand == InteractionHand.MAIN_HAND) {
-            state.setLastActionTime(level.getGameTime());
-            state.synchronizeComboSeq(player, ComboStateRegistry.getId(wide
-                ? ComboStateRegistry.COMBO_A2 : ComboStateRegistry.COMBO_A1));
             if (hit) stack.hurtAndBreak(1, level, player, ItemSlashBlade.getOnBroken(stack, player));
         }
-        player.swing(hand, true);
-        if (hand == InteractionHand.OFF_HAND) CombatPackets.swingOffhand(player);
-        showSweep(player, state.getColorCode(), reach, hand, wide);
+        swingSound(player, hand);
     }
 
     private static boolean withinSwing(ServerPlayer player, net.minecraft.world.entity.Entity target, double reach) {
@@ -131,19 +131,23 @@ final class BladeSweep {
         return new Vec3(vector.x, 0, vector.z);
     }
 
-    private static void showSweep(ServerPlayer player, int color, double reach, InteractionHand hand, boolean wide) {
-        var level = player.level();
-        var particle = new DustParticleOptions(color, wide ? 1.15f : 0.85f);
-        float yaw = player.getYRot() * (float) Math.PI / 180;
-        double radius = reach * (wide ? 0.63 : 0.50);
-        int direction = hand == InteractionHand.MAIN_HAND ? 1 : -1;
-        for (int i = -4; i <= 4; i++) {
-            double angle = yaw + i * 0.20;
-            level.sendParticles(particle, player.getX() - Math.sin(angle) * radius,
-                player.getY() + player.getEyeHeight() * 0.70 + i * 0.045 * direction,
-                player.getZ() + Math.cos(angle) * radius, 1, 0, 0, 0, 0);
-        }
-        level.playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS,
+    static void swingSound(ServerPlayer player, InteractionHand hand) {
+        player.level().playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS,
             0.52f, hand == InteractionHand.MAIN_HAND ? 0.95f : 1.25f);
+    }
+
+    /** Confirm only successful damage, on the struck body/part surface nearest the blade owner. */
+    static void impact(ServerPlayer player, Entity physical) {
+        if (physical == null) return;
+        var bounds = physical.getBoundingBox();
+        var origin = player.position().add(0, player.getEyeHeight() * 0.72, 0);
+        var point = new Vec3(Mth.clamp(origin.x, bounds.minX, bounds.maxX),
+            Mth.clamp(origin.y, bounds.minY, bounds.maxY), Mth.clamp(origin.z, bounds.minZ, bounds.maxZ));
+        point = point.add(origin.subtract(point).normalize().scale(0.025));
+        var level = player.level();
+        level.sendParticles(ParticleTypes.CRIT, point.x, point.y, point.z, 6, 0.12, 0.12, 0.12, 0.035);
+        level.sendParticles(ParticleTypes.ENCHANTED_HIT, point.x, point.y, point.z, 3, 0.05, 0.05, 0.05, 0.01);
+        level.playSound(null, point.x, point.y, point.z, SoundEvents.PLAYER_ATTACK_STRONG,
+            SoundSource.PLAYERS, 0.55f, 1.2f);
     }
 }

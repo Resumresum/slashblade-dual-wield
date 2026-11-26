@@ -99,6 +99,7 @@ public final class HandSlashArts {
             if (!immediate) timelines(hand).put(player, new Pending(blade, damageMultiplier, burst, ACTIVE.get().pair));
             player.swing(hand, true);
             if (hand == InteractionHand.OFF_HAND) CombatPackets.swingOffhand(player);
+            else CombatPackets.mainArt(player);
             return true;
         } finally {
             deactivate();

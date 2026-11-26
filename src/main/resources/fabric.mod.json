@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "slashblade_dual_wield",
-  "version": "0.4.1-experimental",
+  "version": "0.4.12-experimental",
   "name": "SlashBlade Dual Wield",
   "environment": "*",
   "entrypoints": {
